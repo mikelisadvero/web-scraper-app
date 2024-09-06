@@ -1,0 +1,5 @@
+{
+  "routes": [
+    { "src": "/api/scrape", "methods": ["POST"], "dest": "/api/scrape" }
+  ]
+}
