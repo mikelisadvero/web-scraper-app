@@ -14,14 +14,12 @@ async function runApifyActor(type, keyword, numResults, sites) {
   const actorId = type === 'google' ? 'lzjHrkj6h55oGvZvv' : 'ptLGAfpjlMEmQildy';
   const apiUrl = `https://api.apify.com/v2/actor-tasks/${actorId}/run-sync-get-dataset-items`;
 
-  // Construct the search query
   let searchQuery = keyword;
   if (type === 'google' && sites) {
     const siteQuery = sites.split(',').map(site => `site:${site.trim()}`).join(' OR ');
-    searchQuery += ' ' + siteQuery;  // Append site-specific filters if any
+    searchQuery += ' ' + siteQuery;
   }
 
-  // Create the full parameters object to be sent to Apify
   const params = {
     countryCode: "us",
     includeIcons: false,
@@ -29,21 +27,25 @@ async function runApifyActor(type, keyword, numResults, sites) {
     languageCode: "en",
     maxPagesPerQuery: 1,
     mobileResults: false,
-    queries: searchQuery,  // Dynamic value based on user input
+    queries: searchQuery,
     resultsPerPage: numResults,
     saveHtml: false,
     saveHtmlToKeyValueStore: false
   };
 
-  const response = await axios.post(apiUrl, params, {
-    headers: {
-      'Authorization': `Bearer ${process.env.APIFY_TOKEN}`
-    }
-  });
-
-  console.log("API response data:", response.data);  // Log the response for debugging
-  return response.data;
+  try {
+    const response = await axios.post(apiUrl, params, {
+      headers: {
+        'Authorization': `Bearer ${process.env.APIFY_TOKEN}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to call Apify API:", error.response ? error.response.data : error.message);
+    throw new Error(`Failed to call Apify API: ${error.message}`);
+  }
 }
+
 
 async function writeToGoogleSheets(type, keyword, data) {
   const googleClient = await auth.getClient();
