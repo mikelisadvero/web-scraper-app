@@ -11,6 +11,8 @@ const auth = new google.auth.GoogleAuth({
 });
 
 async function runApifyActor(type, keyword, numResults, sites) {
+  console.log("Received keyword for scraping:", keyword); // Log the received keyword
+
   const actorId = type === 'google' ? 'lzjHrkj6h55oGvZvv' : 'ptLGAfpjlMEmQildy';
   const apiUrl = `https://api.apify.com/v2/actor-tasks/${actorId}/run-sync-get-dataset-items`;
   let searchQuery = keyword;
@@ -31,8 +33,10 @@ async function runApifyActor(type, keyword, numResults, sites) {
     }
   });
 
+  console.log("API response:", response.data); // Log the API response to check what is being returned
   return response.data;
 }
+
 
 async function writeToGoogleSheets(type, keyword, data) {
   const googleClient = await auth.getClient();
@@ -52,17 +56,9 @@ async function writeToGoogleSheets(type, keyword, data) {
     }
   });
 
-  // Define headers based on the type of scraper
-  const headers = type === 'google' ? ['Title', 'URL'] : ['Title', 'URL', 'Subscribers', 'Video Views', 'Channel Title'];
-  
-  // Map data to rows, each row matching the headers structure
-  const values = data.map(item => {
-    if (type === 'google') {
-      return [item.title, item.url];  // Adjust these fields based on the actual data structure
-    } else {
-      return [item.title, item.url, item.subscribers, item.views, item.channel];  // Adjust these fields based on the actual data structure
-    }
-  });
+  // Extract titles and URLs from the organic results
+  const headers = ['Title', 'URL'];
+  const values = data.map(item => item.organicResults.map(organic => [organic.title, organic.url])).flat();
 
   await googleSheetsApi.spreadsheets.values.append({
     spreadsheetId: spreadsheet.data.spreadsheetId,
