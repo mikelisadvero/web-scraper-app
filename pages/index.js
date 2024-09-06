@@ -35,5 +35,46 @@ export default function Home() {
     }
   };
 
-  // ... rest of your component code ...
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.title}>Scraper Tool</h1>
+      <div className={styles.toggle}>
+        <span>Google Scraper</span>
+        <label className={styles.switch}>
+          <input
+            type="checkbox"
+            checked={scraperType === 'youtube'}
+            onChange={(e) => setScraperType(e.target.checked ? 'youtube' : 'google')}
+          />
+          <span className={styles.slider}></span>
+        </label>
+        <span>YouTube Scraper</span>
+      </div>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <input
+          type="text"
+          placeholder="Keyword"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          required
+        />
+        <input
+          type="number"
+          placeholder="Number of Results"
+          value={numResults}
+          onChange={(e) => setNumResults(e.target.value)}
+          required
+        />
+        {scraperType === 'google' && (
+          <input
+            type="text"
+            placeholder="Sites to Include (optional)"
+            value={sites}
+            onChange={(e) => setSites(e.target.value)}
+          />
+        )}
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
 }
