@@ -7,12 +7,13 @@ export default function Home() {
   const [numResults, setNumResults] = useState('');
   const [sites, setSites] = useState('');
   const [message, setMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('Processing...');
+    setIsLoading(true);
+    setMessage('');
     try {
-      console.log('Sending request with body:', { type: scraperType, keyword, numResults, sites });
       const response = await fetch('/api/scrape', {
         method: 'POST',
         headers: {
@@ -20,18 +21,16 @@ export default function Home() {
         },
         body: JSON.stringify({ type: scraperType, keyword, numResults, sites }),
       });
-      console.log('Response status:', response.status);
-      console.log('Response headers:', response.headers);
-      const text = await response.text();
-      console.log('Response text:', text);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data = JSON.parse(text);
+      const data = await response.json();
       setMessage(data.message);
     } catch (error) {
       console.error('Error:', error);
       setMessage(`An error occurred: ${error.message}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -73,8 +72,11 @@ export default function Home() {
             onChange={(e) => setSites(e.target.value)}
           />
         )}
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Processing...' : 'Submit'}
+        </button>
       </form>
+      {message && <p className={styles.message}>{message}</p>}
     </div>
   );
 }
