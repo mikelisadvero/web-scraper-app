@@ -14,15 +14,25 @@ async function runApifyActor(type, keyword, numResults, sites) {
   const actorId = type === 'google' ? 'lzjHrkj6h55oGvZvv' : 'ptLGAfpjlMEmQildy';
   const apiUrl = `https://api.apify.com/v2/actor-tasks/${actorId}/run-sync-get-dataset-items`;
 
+  // Construct the search query
   let searchQuery = keyword;
   if (type === 'google' && sites) {
-    const siteQuery = sites.split(',').map(site => `site:${site.trim()}`).join('+OR+');
-    searchQuery += '+' + siteQuery;
+    const siteQuery = sites.split(',').map(site => `site:${site.trim()}`).join(' OR ');
+    searchQuery += ' ' + siteQuery;  // Append site-specific filters if any
   }
 
+  // Create the full parameters object to be sent to Apify
   const params = {
-    keyword: searchQuery,  // Make sure this dynamically replaces any placeholder set in the actor config
-    numResults: numResults
+    countryCode: "us",
+    includeIcons: false,
+    includeUnfilteredResults: false,
+    languageCode: "en",
+    maxPagesPerQuery: 1,
+    mobileResults: false,
+    queries: searchQuery,  // Dynamic value based on user input
+    resultsPerPage: numResults,
+    saveHtml: false,
+    saveHtmlToKeyValueStore: false
   };
 
   const response = await axios.post(apiUrl, params, {
@@ -31,10 +41,9 @@ async function runApifyActor(type, keyword, numResults, sites) {
     }
   });
 
+  console.log("API response data:", response.data);  // Log the response for debugging
   return response.data;
 }
-
-
 
 async function writeToGoogleSheets(type, keyword, data) {
   const googleClient = await auth.getClient();
