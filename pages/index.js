@@ -12,6 +12,7 @@ export default function Home() {
     e.preventDefault();
     setMessage('Processing...');
     try {
+      console.log('Sending request with body:', { type: scraperType, keyword, numResults, sites });
       const response = await fetch('/api/scrape', {
         method: 'POST',
         headers: {
@@ -19,10 +20,14 @@ export default function Home() {
         },
         body: JSON.stringify({ type: scraperType, keyword, numResults, sites }),
       });
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+      const text = await response.text();
+      console.log('Response text:', text);
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
       }
-      const data = await response.json();
+      const data = JSON.parse(text);
       setMessage(data.message);
     } catch (error) {
       console.error('Error:', error);
@@ -30,46 +35,5 @@ export default function Home() {
     }
   };
 
-  return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Scraper Tool</h1>
-      <div className={styles.toggle}>
-        <span>Google Scraper</span>
-        <label className={styles.switch}>
-          <input
-            type="checkbox"
-            checked={scraperType === 'youtube'}
-            onChange={(e) => setScraperType(e.target.checked ? 'youtube' : 'google')}
-          />
-          <span className={styles.slider}></span>
-        </label>
-        <span>YouTube Scraper</span>
-      </div>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <input
-          type="text"
-          placeholder="Keyword"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Number of Results"
-          value={numResults}
-          onChange={(e) => setNumResults(e.target.value)}
-          required
-        />
-        {scraperType === 'google' && (
-          <input
-            type="text"
-            placeholder="Sites to Include (optional)"
-            value={sites}
-            onChange={(e) => setSites(e.target.value)}
-          />
-        )}
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-  );
+  // ... rest of your component code ...
 }

@@ -1,5 +1,10 @@
 {
+  "version": 2,
   "routes": [
-    { "src": "/api/scrape", "methods": ["POST"], "dest": "/api/scrape" }
+    {
+      "src": "/api/scrape",
+      "methods": ["POST"],
+      "dest": "/api/scrape"
+    }
   ]
 }
