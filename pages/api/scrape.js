@@ -16,36 +16,23 @@ async function runApifyActor(type, keyword, numResults, sites) {
 
   let searchQuery = keyword;
   if (type === 'google' && sites) {
-    const siteQuery = sites.split(',').map(site => `site:${site.trim()}`).join(' OR ');
-    searchQuery += ' ' + siteQuery;
+    const siteQuery = sites.split(',').map(site => `site:${site.trim()}`).join('+OR+');
+    searchQuery += '+' + siteQuery;
   }
 
   const params = {
-    countryCode: "us",
-    includeIcons: false,
-    includeUnfilteredResults: false,
-    languageCode: "en",
-    maxPagesPerQuery: 1,
-    mobileResults: false,
-    queries: searchQuery,
-    resultsPerPage: numResults,
-    saveHtml: false,
-    saveHtmlToKeyValueStore: false
+    keyword: searchQuery,  // Make sure this dynamically replaces any placeholder set in the actor config
+    numResults: numResults
   };
 
-  try {
-    const response = await axios.post(apiUrl, params, {
-      headers: {
-        'Authorization': `Bearer ${process.env.APIFY_TOKEN}`
-      }
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Failed to call Apify API:", error.response ? error.response.data : error.message);
-    throw new Error(`Failed to call Apify API: ${error.message}`);
-  }
-}
+  const response = await axios.post(apiUrl, params, {
+    headers: {
+      'Authorization': `Bearer ${process.env.APIFY_TOKEN}`
+    }
+  });
 
+  return response.data;
+}
 
 async function writeToGoogleSheets(type, keyword, data) {
   const googleClient = await auth.getClient();
