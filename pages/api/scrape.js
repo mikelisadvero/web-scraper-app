@@ -1,9 +1,13 @@
 import axios from 'axios';
 import { google } from 'googleapis';
 
+// Update the scopes to include Google Drive for permissions management
 const auth = new google.auth.GoogleAuth({
   credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS),
-  scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+  scopes: [
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/drive'
+  ],
 });
 
 async function runApifyActor(type, keyword, numResults, sites) {
@@ -34,8 +38,6 @@ async function writeToGoogleSheets(type, keyword, data) {
   const googleClient = await auth.getClient();
   const googleSheetsApi = google.sheets({ version: 'v4', auth: googleClient });
   const sheetTitle = type === 'google' ? `Search: ${keyword}` : `YouTube: ${keyword}`;
-  const headers = type === 'google' ? ['Title', 'URL'] : ['Title', 'URL', 'Subscribers', 'Video Views', 'Channel Title'];
-  const values = data.map(item => type === 'google' ? [item.title, item.url] : [item.title, item.url, item.subscribers, item.views, item.channel]);
 
   const spreadsheet = await googleSheetsApi.spreadsheets.create({
     requestBody: {
@@ -59,7 +61,26 @@ async function writeToGoogleSheets(type, keyword, data) {
     }
   });
 
+  // Call the sharing function here
+  await shareSheetWithUser(spreadsheet.data.spreadsheetId, process.env.MY_EMAIL);
+
   return `Created new sheet: ${spreadsheet.data.spreadsheetUrl}`;
+}
+
+async function shareSheetWithUser(spreadsheetId, userEmail) {
+  const driveService = google.drive({ version: 'v3', auth: await auth.getClient() });
+  const permission = {
+    type: 'user',
+    role: 'writer',
+    emailAddress: userEmail
+  };
+
+  await driveService.permissions.create({
+    resource: permission,
+    fileId: spreadsheetId,
+    fields: 'id',
+    sendNotificationEmail: false  // Disable email notification
+  });
 }
 
 export default async function handler(req, res) {
