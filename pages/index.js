@@ -6,18 +6,28 @@ export default function Home() {
   const [keyword, setKeyword] = useState('');
   const [numResults, setNumResults] = useState('');
   const [sites, setSites] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('/api/scrape', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ type: scraperType, keyword, numResults, sites }),
-    });
-    const data = await response.json();
-    alert(data.message);
+    setMessage('Processing...');
+    try {
+      const response = await fetch('/api/scrape', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ type: scraperType, keyword, numResults, sites }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setMessage(data.message);
+    } catch (error) {
+      console.error('Error:', error);
+      setMessage(`An error occurred: ${error.message}`);
+    }
   };
 
   return (
