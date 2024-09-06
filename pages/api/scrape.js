@@ -39,6 +39,18 @@ async function writeToGoogleSheets(type, keyword, data) {
   const googleSheetsApi = google.sheets({ version: 'v4', auth: googleClient });
   const sheetTitle = type === 'google' ? `Search: ${keyword}` : `YouTube: ${keyword}`;
 
+  // Define headers based on the type of scraper
+  const headers = type === 'google' ? ['Title', 'URL'] : ['Title', 'URL', 'Subscribers', 'Video Views', 'Channel Title'];
+  
+  // Map data to rows, each row matching the headers structure
+  const values = data.map(item => {
+    if (type === 'google') {
+      return [item.title, item.url];  // Assuming 'item.title' and 'item.url' are the fields in your data
+    } else {
+      return [item.title, item.url, item.subscribers, item.views, item.channel]; // Adjust according to your data structure
+    }
+  });
+
   const spreadsheet = await googleSheetsApi.spreadsheets.create({
     requestBody: {
       properties: {
@@ -65,6 +77,8 @@ async function writeToGoogleSheets(type, keyword, data) {
   await shareSheetWithUser(spreadsheet.data.spreadsheetId, process.env.MY_EMAIL);
 
   return `Created new sheet: ${spreadsheet.data.spreadsheetUrl}`;
+}
+
 }
 
 async function shareSheetWithUser(spreadsheetId, userEmail) {
