@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "my-vercel-app",
+  "private_key_id": "2f6ab594c6a14969a5f3b5effa92154d76c51202",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC1sfL5LSLc/xlW\n8t5HjCEaP1Z31J7W7WaZsQRxnL1H0hT/C3qCWAC2Ejo1lWQ0RpHwhVOAnzFXbmaY\ndeBdZ/cI4xBh4wjAVTkZBz9b57FqrIZTcAXgu3PnbeJLkqBStbc2xVelmyrZs+ra\n4wmGkh2nbzfNe0RDFfY8j0i7FBwKfm9ULH06NlD6BGJfafOUzXdxq/1cSBXYAgXI\n6uWYxcDZ8CQvMM/9afo5tXOXEqN6JNFa8inoeJVzTbrQ3fp6Y3gxq5FsyKbiUS8S\nAE3hqfdEgpnBBpmSEIWjcWn1LOkmFC33DxddCnxSQvzp21MoIVGIEVeYGj/Xwwud\ndJW/GVlfAgMBAAECggEAP5QDng6dvvAi2UqF3kpaAPm905Oae0G6H7iSAgFjOGD6\nSN6m4TpTEWLibIKYfDRfd+bnd7/8v4fZraq9tmGdT0ZJIr+Tfd20a54eHRY/fkDd\nhg/SdreRUJ+iSmiF4jtE340BZOkdfu1Wln5QhH7XkpG32Ja0JbdnIPzQaeoY/9B0\nAkbRfuy8MEbxX9PEij9Tcxof4CxNbWcVDvDIBYOx3BcZ1cWp0pzUwSPzsqOI+MQ6\nBbyhvZ8OOnLRZII6DavMpSLTxpRxV6sg2fYP0eeAdWz2NwNwnotIbSiYTFRQJmub\nRoyEApfJHsUoLQrVts3l0VeFooYn/2vebiRed9y28QKBgQDlY0DRZpi3uMIYLXQT\n2o5x97c7Q1vwBEG5uQp9lh7AjOCd6gp3vQr81snlZkUYGTKsiWXgDdDKv21IwiMp\n89sQaqtbPAEM7d34PlQ84E6zO9CE0Rq7XjmtfKbq/C8bMcO4UphxcVHoIlI//3bx\n5p1lUaMhskzDFrXQW/YgBan4bwKBgQDKxj1zIbGrN2OjX/qoqjY0spBXBENR7j80\n01iP0KT3Hbk6bcRgHlDl0jtNMSEu92VIi/i+qblNjr3p+XqxRQurfQoUt/8+xcyk\nboMguqJSLyMRicx4Ul8ltV9obey2wS8aCoUNtwhy+1HO4WqyBpKIshTZcvr6I2U1\n1JUesvbGEQKBgQC0doRc+XE2QMV6TfAfWndsU+00U4b16fNnUJtfOAZTh8GCmsjH\ncNM/HR/TOMUs8035jVK3lUbo6vboIcuWSsHSRYkwCqHs8QoLLcYJ6pIf0fP3Oabl\nN3j68rFC90l8BIes8FX8EaHVlYLN1IZYQw0a08IaVXKsnKZHGMImaS5SQwKBgBiD\nnNw1X5hWaupOaSxI36LBT6flcQoPpn6JanSAgeEKK+F/cbU5FQijwN2VKfDWod0C\nZwEN3cQdlKIbshSKR13lEPnuQKJjIVljruCfD46l+jRdl2WYd75EThN+7pYthrc8\nPFerIA9eiMZdBBwfpUl3VgPv3Z2t98dpOtnqQuExAoGBAJUVbuv5wrrOf4dihewn\nLCdEkvxTn9kTgUAqeussNKl1VoJqzChdHOtvdmcSmNEYMMPJIG+pr2xpzYKJ3cOi\nrFlSPQEK/oiX53yEqk3Ov6/BVsanaDVNfXV4//t/egQ7YtLWXHp9LmkC3I8e6/tR\nQ93XpMo7+yE47PUxEpQ2Nr0J\n-----END PRIVATE KEY-----\n",
+  "client_email": "my-vercel-app@my-vercel-app.iam.gserviceaccount.com",
+  "client_id": "112104492295847205914",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/my-vercel-app%40my-vercel-app.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
