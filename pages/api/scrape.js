@@ -11,19 +11,17 @@ const auth = new google.auth.GoogleAuth({
 });
 
 async function runApifyActor(type, keyword, numResults, sites) {
-  console.log("Received keyword for scraping:", keyword); // Log the received keyword
-
   const actorId = type === 'google' ? 'lzjHrkj6h55oGvZvv' : 'ptLGAfpjlMEmQildy';
   const apiUrl = `https://api.apify.com/v2/actor-tasks/${actorId}/run-sync-get-dataset-items`;
-  let searchQuery = keyword;
 
+  let searchQuery = keyword;
   if (type === 'google' && sites) {
     const siteQuery = sites.split(',').map(site => `site:${site.trim()}`).join('+OR+');
     searchQuery += '+' + siteQuery;
   }
 
   const params = {
-    keyword: searchQuery,
+    keyword: searchQuery,  // Make sure this dynamically replaces any placeholder set in the actor config
     numResults: numResults
   };
 
@@ -33,9 +31,9 @@ async function runApifyActor(type, keyword, numResults, sites) {
     }
   });
 
-  console.log("API response:", response.data); // Log the API response to check what is being returned
   return response.data;
 }
+
 
 
 async function writeToGoogleSheets(type, keyword, data) {
